@@ -26,5 +26,28 @@
     return self;
 }
 
++(void)retrieveMembeById:(NSString*)memberId withCompletion:(void (^)(Member *))complete{
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/member/%@?&sign=true&photo-host=public&page=20&key=477d1928246a4e162252547b766d3c6d", memberId]];
+
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                                   NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+                                   Member *member = [[Member alloc]initWithDictionary:dict];
+                                   complete(member);
+                              }];
+}
+
+-(void)downloadUserImage:(void (^)(UIImage *))complete{
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:self.photoURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+       UIImage *image = [UIImage imageWithData:data];
+        complete(image);
+    }];
+}
+
+
+
 
 @end

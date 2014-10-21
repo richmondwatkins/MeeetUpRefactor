@@ -8,7 +8,7 @@
 
 #import "Comment.h"
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 @interface Event : NSObject
 
 @property (nonatomic, strong) NSString *eventID;
@@ -24,4 +24,9 @@
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
+-(void)loadCommentsForEvent:(void (^)(NSArray *))complete;
+    
+-(void)downloadEventImageFromURL:(void(^)(UIImage *))complete;
+
++(void)preformSearchWithKeyword:(NSString *)keyword withCompletionBlock:(void(^)(NSArray *))complete;
 @end
